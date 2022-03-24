@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ApiResource()
  * @ORM\Table()
  */
-class Article
+class Clients
 {
     /**
      * @ORM\Column(type="integer")
@@ -23,22 +23,22 @@ class Article
     /**
      * @ORM\Column(type="string", length=100)
      */
-    private $name;
+    private $raisonsociale;
+
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $siret;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $slug;
+    private $email;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="integer")
      */
-    private $description;
-
-    /**
-     * @ORM\Column(type="text")
-     */
-    private $brand;
+    private $password;
 
     /**
      * @ORM\Column(type="datetime")
@@ -50,67 +50,55 @@ class Article
      */
     private $updatedAt;
 
+
     public function getId()
     {
         return $this->id;
     }
 
-    public function getName()
+    public function getRaisonsociale()
     {
-        return $this->name;
+        return $this->raisonsociale;
     }
 
-    public function setName($name)
+    public function setRaisonsociale($raisonsociale)
     {
-        $this->name = $name;
+        $this->raisonsociale = $raisonsociale;
 
         return $this;
     }
 
-    public function getSlug()
+    public function getSiret()
     {
-        return $this->slug;
+        return $this->siret;
     }
 
-    public function setSlug($slug)
+    public function setSiret($siret)
     {
-        $this->slug = $slug;
+        $this->siret = $siret;
 
         return $this;
     }
 
-    public function getBrand()
+    public function getEmail()
     {
-        return $this->brand;
+        return $this->email;
     }
 
-    public function setBrand($brand)
+    public function setEmail($email)
     {
-        $this->brand = $brand;
+        $this->email = $email;
 
         return $this;
     }
-
-    public function getColor()
+    public function getPassword()
     {
-        return $this->color;
+        return $this->password;
     }
 
-    public function setColor($color)
+    public function setPassword($password)
     {
-        $this->color = $color;
-
-        return $this;
-    }
-
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    public function setDescription($description)
-    {
-        $this->description = $description;
+        $this->password = $password;
 
         return $this;
     }
