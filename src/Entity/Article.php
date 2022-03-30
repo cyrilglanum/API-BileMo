@@ -5,10 +5,13 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use App\Repository\ArticleRepository;
+
 
 /**
- * @ORM\Entity
- * @ApiResource()
+ * @ORM\Entity()
+ * @ApiResource(normalizationContext={'groups' => ['readCollection']})
  * @ORM\Table()
  */
 class Article
@@ -17,16 +20,19 @@ class Article
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Groups({"public","collection"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Groups(['read:collection'])
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups(['read:collection'])
      */
     private $slug;
 
