@@ -5,58 +5,76 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity
  * @ApiResource()
  * @ORM\Table()
  */
-class Users
+class Users extends abstractController
 {
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Groups("user:read")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Groups("user:read")
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Groups("user:read")
      */
     private $firstname;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="string")
+     * @Groups("user:read")
      */
     private $email;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups("user:read")
      */
     private $postalcode;
 
     /**
-     * @ORM\Column(type="string, length=100")
+     * @ORM\Column(type="string", length=100)
+     * @Groups("user:read")
      */
     private $ville;
 
     /**
-     * @ORM\Column(type="string, length=100")
+     * @ORM\Column(type="integer", length=100)
+     * @Groups("user:read")
      */
     private $actif;
 
     /**
+     * @ORM\Column(type="integer")
+     * @Groups("user:read")
+     */
+    private $client_id;
+
+
+    /**
      * @ORM\Column(type="datetime")
+     * @Groups("user:read")
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups("user:read")
      */
     private $updatedAt;
 
@@ -110,6 +128,18 @@ class Users
     public function setPostalcode($postalcode)
     {
         $this->postalcode = $postalcode;
+
+        return $this;
+    }
+
+    public function getClientId()
+    {
+        return $this->client_id;
+    }
+
+    public function setClientId($client_id)
+    {
+        $this->client_id = $client_id;
 
         return $this;
     }

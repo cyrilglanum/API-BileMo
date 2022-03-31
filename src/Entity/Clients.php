@@ -5,48 +5,56 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @ORM\Entity
  * @ApiResource()
  * @ORM\Table()
  */
-class Clients
+class Clients extends abstractController
 {
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * Groups('client:read')
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=100)
+     * Groups('client:read')
      */
     private $raisonsociale;
 
     /**
      * @ORM\Column(type="string", length=100)
+     * Groups('client:read')
      */
     private $siret;
 
     /**
      * @ORM\Column(type="text")
+     * Groups('client:read')
      */
     private $email;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string")
+     * Groups('client:read')
      */
     private $password;
 
     /**
      * @ORM\Column(type="datetime")
+     * Groups('client:read')
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
+     * Groups('client:read')
      */
     private $updatedAt;
 
