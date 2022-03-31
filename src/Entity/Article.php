@@ -5,54 +5,65 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Serializer\Annotation\Groups;
-use App\Repository\ArticleRepository;
+use App\Repository;
 
 
 /**
- * @ORM\Entity()
- * @ApiResource(normalizationContext={'groups' => ['readCollection']})
+ * @ORM\Entity(repositoryClass="App\Repository\ArticleRepository")
+ * @ApiResource()
  * @ORM\Table()
  */
-class Article
+class Article extends abstractController
 {
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups({"public","collection"})
+     * @Groups("article:read")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=100)
-     * @Groups(['read:collection'])
+     * @Groups("article:read")
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups(['read:collection'])
+     * @Groups("article:read")
      */
     private $slug;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups("article:read")
      */
     private $description;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups("article:read")
+     */
+    private $color;
+
+    /**
+     * @ORM\Column(type="text")
+     * @Groups("article:read")
      */
     private $brand;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups("article:read")
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups("article:read")
      */
     private $updatedAt;
 

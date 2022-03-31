@@ -2,19 +2,19 @@
 
 namespace App\Controller;
 
-use App\Entity\Article;
-use App\Repository\ArticleRepository;
+use App\Entity\Users;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class ArticleController extends abstractController
+class UserController extends abstractController
 {
     /**
-     * @Route("/api/articles/{id}", name="article_by_id")
+     * @Route("/api/users/{id}", name="user_by_id")
      */
-    public function getArticle(ArticleRepository $articleRepository, SerializerInterface $serializer, $id)
+    public function getArticle(UserRepository $articleRepository, SerializerInterface $serializer, $id)
     {
         $article = $articleRepository->find($id);
 
@@ -28,9 +28,9 @@ class ArticleController extends abstractController
     }
 
     /**
-     * @Route("/api/articles", name="articles")
+     * @Route("/api/users", name="users")
      */
-    public function getArticles(ArticleRepository $articleRepository, SerializerInterface $serializer)
+    public function getArticles(UserRepository $articleRepository, SerializerInterface $serializer)
     {
 
         $articles = $articleRepository->findAll();

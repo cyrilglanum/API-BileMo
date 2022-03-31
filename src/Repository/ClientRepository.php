@@ -2,23 +2,23 @@
 
 namespace App\Repository;
 
-use App\Entity\Article;
+use App\Entity\Clients;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 
 /**
- * @method Article|null find($id, $lockMode = null, $lockVersion = null)
- * @method Article|null findOneBy(array $criteria, array $orderBy = null)
- * @method Article[]    findAll()
- * @method Article[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Clients|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Clients|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Clients[]    findAll()
+ * @method Clients[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ArticleRepository extends ServiceEntityRepository
+class ClientRepository extends ServiceEntityRepository
 {
 
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry,Article::class);
+        parent::__construct($registry,Clients::class);
     }
 
     // /**
