@@ -6,10 +6,12 @@ use App\Entity\Users;
 use App\Repository\ClientRepository;
 use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Type;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Constraints\Json;
 
 class UserController extends abstractController
 {
@@ -46,9 +48,9 @@ class UserController extends abstractController
     }
 
     /**
-     * @Route("/api/customer/{customer_id}/users", name="users")
+     * @Route("/api/customer/{customer_id}/users", name="usersByCustomer")
      */
-    public function getUserLinkedToCustomer(UserRepository $userRepository, ClientRepository $clientRepository, SerializerInterface $serializer, $customer_id)
+    public function getUsersLinkedToCustomer(UserRepository $userRepository, ClientRepository $clientRepository, SerializerInterface $serializer, $customer_id): Response
     {
         $customer = $clientRepository->find($customer_id);
 
@@ -63,6 +65,46 @@ class UserController extends abstractController
         ]);
 
         return $response;
+    }
+
+    /**
+     * @Route("/api/customer/{customer_id}/user/{id}", name="userFromCustomer")
+     */
+    public function getUserLinkedToCustomer(UserRepository $userRepository, ClientRepository $clientRepository, SerializerInterface $serializer, $customer_id, $id): Response
+    {
+        $customer = $clientRepository->find($customer_id);
+
+        $customer_user = $userRepository->findOneBy([
+                'client_id' => $customer->getId(),
+                'id' => $id]
+        );
+
+        $json = $serializer->serialize($customer_user, 'json', ['groups' => 'user:read']);
+
+        $response = new Response($json, 200, [
+            "Content-Type" => "application/json"
+        ]);
+
+        return $response;
+    }
+
+    /**
+     * @Route("/api/add/customer/{customer_id}/user", name="addUserToCustomer")
+     */
+    public function addUserLinkedToCustomer(Request $request,UserRepository $userRepository, ClientRepository $clientRepository, SerializerInterface $serializer, $customer_id): Response
+    {
+        dd($request);
+        $customer = $clientRepository->find($customer_id);
+
+        //controle des informations données
+
+//        $json = $serializer->serialize($customer_user, 'json', ['groups' => 'user:read']);
+
+//        $response = new Response($json, 200, [
+//            "Content-Type" => "application/json"
+//        ]);
+
+//        return $response;
     }
 
 }
