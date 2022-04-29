@@ -89,12 +89,18 @@ class UserController extends abstractController
     }
 
     /**
-     * @Route("/api/add/customer/{customer_id}/user", name="addUserToCustomer")
+     * @Route("/api/customer/add/user", name="addUserToCustomer")
      */
-    public function addUserLinkedToCustomer(Request $request,UserRepository $userRepository, ClientRepository $clientRepository, SerializerInterface $serializer, $customer_id): Response
+    public function addUserLinkedToCustomer(Request $request,UserRepository $userRepository, ClientRepository $clientRepository, SerializerInterface $serializer): Response
     {
-        dd($request);
-        $customer = $clientRepository->find($customer_id);
+        $customer = $clientRepository->find($request->request->get('customer_id'));
+
+        $user_infos = $request->request->get('user');
+
+        dd($request->request->get('user'), json_decode($user_infos),$request->request->get('try'), json_decode($request->request->get('try')));
+
+
+        dd($request->request->get('user'));
 
         //controle des informations données
 
