@@ -176,11 +176,26 @@ class Users extends abstractController
         return $this->createdAt;
     }
 
+
+    public function setCreatedAt($created_at)
+    {
+        $this->createdAt = $created_at;
+
+        return $this;
+    }
+
     /**
      * @return DateTime
      */
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    public function setUpdatedAt($updated_at)
+    {
+        $this->updatedAt = $updated_at;
+
+        return $this;
     }
 }

@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\Users;
 use App\Repository\ClientRepository;
 use App\Repository\UserRepository;
+use App\Services\UserService;
 use Doctrine\DBAL\Types\Type;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -91,26 +93,66 @@ class UserController extends abstractController
     /**
      * @Route("/api/customer/add/user", name="addUserToCustomer")
      */
-    public function addUserLinkedToCustomer(Request $request,UserRepository $userRepository, ClientRepository $clientRepository, SerializerInterface $serializer): Response
+    public function addUserLinkedToCustomer(Request $request, UserRepository $userRepository, ClientRepository $clientRepository, SerializerInterface $serializer, UserService $userService): Response
     {
-        $customer = $clientRepository->find($request->request->get('customer_id'));
+        $user_infos = json_decode($request->request->get('user'));
 
-        $user_infos = $request->request->get('user');
+        $user = new Users();
+        $user->setLastname($user_infos->user->lastname);
+        $user->setFirstname($user_infos->user->firstname);
+        $user->setEmail($user_infos->user->email);
+        $user->setPostalcode($user_infos->user->postal_code);
+        $user->setVille($user_infos->user->ville);
+        $user->setActif($user_infos->user->actif);
+        $user->setClientId($user_infos->user->client_id);
+        $user->setCreatedAt(new \DateTimeImmutable('now'));
+        $user->setUpdatedAt(new \DateTimeImmutable('now'));
 
-        dd($request->request->get('user'), json_decode($user_infos),$request->request->get('try'), json_decode($request->request->get('try')));
+        try {
+            $emailExists = $userService->mailExists($user_infos->user->email, $userRepository);
 
+            if ($emailExists === false) {
+                //controle des données envoyées sauf mail + flush du model.
+                $userService->add($user, $userRepository);
+            }
+        } catch (Exception $e) {
 
-        dd($request->request->get('user'));
+            return new Response($e->getMessage(), 403, [
+                "Content-Type" => "application/json"
+            ]);
+        }
 
-        //controle des informations données
+        $response = new Response("L'utilisateur a bien été ajouté.", 200, [
+            "Content-Type" => "application/json"
+        ]);
 
-//        $json = $serializer->serialize($customer_user, 'json', ['groups' => 'user:read']);
+        return $response;
+    }
 
-//        $response = new Response($json, 200, [
-//            "Content-Type" => "application/json"
-//        ]);
+    /**
+     * @Route("/api/customer/delete/user", name="deleteUser")
+     */
+    public function deleteUserLinkedToCustomer(Request $request, UserRepository $userRepository, ClientRepository $clientRepository, SerializerInterface $serializer, UserService $userService): Response
+    {
+        $user_infos = json_decode($request->request->get('user'));
 
-//        return $response;
+        try {
+            $user = $userService->findByMail($user_infos->user->email, $userRepository);
+
+            if ($user) {
+                $userService->delete($user, $userRepository);
+            }
+        } catch (Exception $e) {
+            return new Response($e->getMessage(), 403, [
+                "Content-Type" => "application/json"
+            ]);
+        }
+
+        $response = new Response("L'utilisateur a bien été supprimé.", 200, [
+            "Content-Type" => "application/json"
+        ]);
+
+        return $response;
     }
 
 }

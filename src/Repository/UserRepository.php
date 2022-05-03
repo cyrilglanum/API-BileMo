@@ -18,35 +18,20 @@ class UserRepository extends ServiceEntityRepository
 
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry,Users::class);
+        parent::__construct($registry, Users::class);
     }
 
-    // /**
-    //  * @return Article[] Returns an array of Article objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function add(Users $user): bool
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $this->getEntityManager()->persist($user);
+        $this->getEntityManager()->flush();
+        return true;
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Phone
+    public function delete(Users $user): bool
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $this->getEntityManager()->remove($user);
+        $this->getEntityManager()->flush();
+        return true;
     }
-    */
 }
