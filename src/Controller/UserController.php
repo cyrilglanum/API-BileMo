@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraints\Json;
 class UserController extends abstractController
 {
     /**
-     * @Route("/api/users/{id}", name="user_by_id")
+     * @Route("/api/v1/users/{id}", name="user_by_id")
      */
     public function getApiUser(UserRepository $userRepository, SerializerInterface $serializer, $id)
     {
@@ -34,7 +34,7 @@ class UserController extends abstractController
     }
 
     /**
-     * @Route("/api/users/all", name="users")
+     * @Route("/api/v1/users/all", name="users")
      */
     public function getApiUsers(UserRepository $userRepository, SerializerInterface $serializer)
     {
@@ -50,7 +50,7 @@ class UserController extends abstractController
     }
 
     /**
-     * @Route("/api/customer/{customer_id}/users", name="usersByCustomer")
+     * @Route("/api/v1/customer/{customer_id}/users", name="usersByCustomer")
      */
     public function getUsersLinkedToCustomer(UserRepository $userRepository, ClientRepository $clientRepository, SerializerInterface $serializer, $customer_id): Response
     {
@@ -70,7 +70,7 @@ class UserController extends abstractController
     }
 
     /**
-     * @Route("/api/customer/{customer_id}/user/{id}", name="userFromCustomer")
+     * @Route("/api/v1/customer/{customer_id}/user/{id}", name="userFromCustomer")
      */
     public function getUserLinkedToCustomer(UserRepository $userRepository, ClientRepository $clientRepository, SerializerInterface $serializer, $customer_id, $id): Response
     {
@@ -91,7 +91,7 @@ class UserController extends abstractController
     }
 
     /**
-     * @Route("/api/customer/add/user", name="addUserToCustomer")
+     * @Route("/api/v1/customer/add/user", name="addUserToCustomer")
      */
     public function addUserLinkedToCustomer(Request $request, UserRepository $userRepository, ClientRepository $clientRepository, SerializerInterface $serializer, UserService $userService): Response
     {
@@ -130,14 +130,14 @@ class UserController extends abstractController
     }
 
     /**
-     * @Route("/api/customer/delete/user", name="deleteUser")
+     * @Route("/api/v1/customer/delete/user", name="deleteUser")
      */
     public function deleteUserLinkedToCustomer(Request $request, UserRepository $userRepository, ClientRepository $clientRepository, SerializerInterface $serializer, UserService $userService): Response
     {
         $user_infos = json_decode($request->request->get('user'));
 
         try {
-            $user = $userService->findByMail($user_infos->user->email, $userRepository);
+            $user = $userService->findUser($user_infos->user->email, $userRepository);
 
             if ($user) {
                 $userService->delete($user, $userRepository);

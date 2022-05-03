@@ -17,10 +17,21 @@ class UserService
 
     function mailExists($mail, UserRepository $userRepository): bool
     {
-        $mailExists = $this->findByMail($mail,$userRepository);
+        $mailExists = $this->findByMail($mail, $userRepository);
 
-        if($mailExists != null){
+        if ($mailExists !== null && $mailExists !== false) {
             throw new \Exception("Cet email possède déjà un compte.");
+        }
+
+        return false;
+    }
+
+    function findUser($mail, UserRepository $userRepository): bool
+    {
+        $user = $this->findByMail($mail, $userRepository);
+
+        if ($user === false) {
+            throw new \Exception("Le compte à supprimer n'existe pas.");
         }
 
         return false;
@@ -30,7 +41,7 @@ class UserService
     {
         $addUser = $userRepository->add($user);
 
-        if($addUser !== true){
+        if ($addUser !== true) {
             throw new \Exception("L'utilisateur n'a pas pu être inséré.");
         }
 
@@ -41,23 +52,21 @@ class UserService
     {
         $deleteUser = $userRepository->delete($user);
 
-        if($deleteUser !== true){
+        if ($deleteUser !== true) {
             throw new \Exception("L'utilisateur n'a pas pu être supprimé.");
         }
 
         return true;
     }
 
-
-    public function findByMail($mail, UserRepository $userRepository): ?\App\Entity\Users
+    public function findByMail($mail, UserRepository $userRepository)
     {
         $user = $userRepository->findOneBy(["email" => $mail]);
 
-        if($user) {
+        if ($user) {
             return $user;
-        }else{
-        	throw new \Exception("L'utilisateur n'a pas été trouvé.");
+        } else {
+            return false;
         }
-
     }
 }
