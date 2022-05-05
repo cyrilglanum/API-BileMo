@@ -15,9 +15,9 @@ class UserService
         $this->userRepository = $userRepository;
     }
 
-    function mailExists($mail, UserRepository $userRepository): bool
+    function mailExists($mail): bool
     {
-        $mailExists = $this->findByMail($mail, $userRepository);
+        $mailExists = $this->findByMail($mail);
 
         if ($mailExists !== null && $mailExists !== false) {
             throw new \Exception("Cet email possède déjà un compte.");
@@ -26,9 +26,9 @@ class UserService
         return false;
     }
 
-    function findUser($mail, UserRepository $userRepository): bool
+    function findUser($mail): bool
     {
-        $user = $this->findByMail($mail, $userRepository);
+        $user = $this->findByMail($mail);
 
         if ($user === false) {
             throw new \Exception("Le compte à supprimer n'existe pas.");
@@ -37,9 +37,9 @@ class UserService
         return false;
     }
 
-    public function add($user, UserRepository $userRepository): bool
+    public function add($user): bool
     {
-        $addUser = $userRepository->add($user);
+        $addUser = $this->userRepository->add($user);
 
         if ($addUser !== true) {
             throw new \Exception("L'utilisateur n'a pas pu être inséré.");
@@ -48,9 +48,9 @@ class UserService
         return true;
     }
 
-    public function delete($user, UserRepository $userRepository): bool
+    public function delete($user): bool
     {
-        $deleteUser = $userRepository->delete($user);
+        $deleteUser = $this->userRepository->delete($user);
 
         if ($deleteUser !== true) {
             throw new \Exception("L'utilisateur n'a pas pu être supprimé.");
@@ -59,9 +59,9 @@ class UserService
         return true;
     }
 
-    public function findByMail($mail, UserRepository $userRepository)
+    public function findByMail($mail)
     {
-        $user = $userRepository->findOneBy(["email" => $mail]);
+        $user = $this->userRepository->findOneBy(["email" => $mail]);
 
         if ($user) {
             return $user;

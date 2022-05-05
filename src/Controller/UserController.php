@@ -109,24 +109,21 @@ class UserController extends abstractController
         $user->setUpdatedAt(new \DateTimeImmutable('now'));
 
         try {
-            $emailExists = $userService->mailExists($user_infos->user->email, $userRepository);
+            $emailExists = $userService->mailExists($user_infos->user->email);
 
             if ($emailExists === false) {
                 //controle des données envoyées sauf mail + flush du model.
                 $userService->add($user, $userRepository);
             }
         } catch (Exception $e) {
-
             return new Response($e->getMessage(), 403, [
                 "Content-Type" => "application/json"
             ]);
         }
 
-        $response = new Response("L'utilisateur a bien été ajouté.", 200, [
+        return new Response("L'utilisateur a bien été ajouté.", 200, [
             "Content-Type" => "application/json"
         ]);
-
-        return $response;
     }
 
     /**
