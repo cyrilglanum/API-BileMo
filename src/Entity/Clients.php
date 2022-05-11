@@ -6,13 +6,16 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity
  * @ApiResource()
  * @ORM\Table()
+ * @method string getUserIdentifier()
  */
-class Clients extends abstractController
+class Clients extends abstractController implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
      * @ORM\Column(type="integer")
@@ -21,6 +24,12 @@ class Clients extends abstractController
      * Groups('client:read')
      */
     private $id;
+
+    /**
+     * @ORM\Column(type="string", length=100)
+     * Groups('client:read')
+     */
+    private $username;
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -64,6 +73,18 @@ class Clients extends abstractController
         return $this->id;
     }
 
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    public function setUsername($username)
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
     public function getRaisonsociale()
     {
         return $this->raisonsociale;
@@ -99,7 +120,8 @@ class Clients extends abstractController
 
         return $this;
     }
-    public function getPassword()
+
+    public function getPassword():string
     {
         return $this->password;
     }
@@ -125,5 +147,30 @@ class Clients extends abstractController
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    public function getRoles()
+    {
+        // TODO: Implement getRoles() method.
+    }
+
+    public function getSalt()
+    {
+        // TODO: Implement getSalt() method.
+    }
+
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
+
+    public function __call($name, $arguments)
+    {
+        // TODO: Implement @method string getUserIdentifier()
+    }
+
+    public function getIdentifier():string
+    {
+        return $this->email;
     }
 }

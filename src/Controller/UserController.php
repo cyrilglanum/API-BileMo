@@ -113,7 +113,7 @@ class UserController extends abstractController
 
             if ($emailExists === false) {
                 //controle des données envoyées sauf mail + flush du model.
-                $userService->add($user, $userRepository);
+                $userService->add($user);
             }
         } catch (Exception $e) {
             return new Response($e->getMessage(), 403, [
@@ -129,15 +129,15 @@ class UserController extends abstractController
     /**
      * @Route("/api/v1/customer/delete/user", name="deleteUser")
      */
-    public function deleteUserLinkedToCustomer(Request $request, UserRepository $userRepository, ClientRepository $clientRepository, SerializerInterface $serializer, UserService $userService): Response
+    public function deleteUserLinkedToCustomer(Request $request, UserService $userService): Response
     {
         $user_infos = json_decode($request->request->get('user'));
 
         try {
-            $user = $userService->findUser($user_infos->user->email, $userRepository);
+            $user = $userService->findUser($user_infos->user->email);
 
             if ($user) {
-                $userService->delete($user, $userRepository);
+                $userService->delete($user);
             }
         } catch (Exception $e) {
             return new Response($e->getMessage(), 403, [
