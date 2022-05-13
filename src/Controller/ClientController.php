@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 class ClientController extends abstractController
 {
     /**
-     * @Route("/api/clients/{id}", name="client_by_id")
+     * @Route("/api/v1/clients/{id}", name="client_by_id")
      */
     public function getClient(ClientRepository $clientRepository, SerializerInterface $serializer, $id)
     {
@@ -27,18 +27,16 @@ class ClientController extends abstractController
     }
 
     /**
-     * @Route("/api/clients", name="clients")
+     * @Route("/api/v1/clients", name="clients")
      */
     public function getClients(ClientRepository $clientRepository, SerializerInterface $serializer)
     {
-        $articles = $clientRepository->findAll();
+        $clients = $clientRepository->findAll();
 
-        $json = $serializer->serialize($articles, 'json', ['groups' => 'client:read']);
+        $json = $serializer->serialize($clients, 'json', ['groups' => 'client:read']);
 
-        $response = new Response($json, 200,[
+        return new Response($json, 200,[
             "Content-Type" => "application/json"
         ]);
-
-        return $response;
     }
 }

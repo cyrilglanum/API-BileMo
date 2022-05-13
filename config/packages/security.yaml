@@ -3,19 +3,19 @@ security:
 
     enable_authenticator_manager: true
     password_hashers:
-        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: bcrypt
 
     providers:
-        users:
+        app_user_provider:
             entity:
-                class: App\Entity\Clients
-                property: username
+                class: App\Entity\Users
+                property: email
 
     firewalls:
         login:
             pattern: ^/api/login
             stateless: true
-            provider: users
+            provider: app_user_provider
             json_login:
                 check_path: /api/login_check
                 success_handler: lexik_jwt_authentication.handler.authentication_success
@@ -24,8 +24,10 @@ security:
         api:
             pattern:   ^/api
             stateless: true
-            jwt: ~
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
 
     access_control:
-        - { path: ^/api/login, roles: PUBLIC_ACCESS }
+        - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }

@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity
@@ -21,49 +22,49 @@ class Clients extends abstractController implements UserInterface, PasswordAuthe
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * Groups('client:read')
+     * @Groups({"client:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=100)
-     * Groups('client:read')
+     * @Groups('client:read')
      */
     private $username;
 
     /**
      * @ORM\Column(type="string", length=100)
-     * Groups('client:read')
+     * @Groups('client:read')
      */
     private $raisonsociale;
 
     /**
      * @ORM\Column(type="string", length=100)
-     * Groups('client:read')
+     * @Groups('client:read')
      */
     private $siret;
 
     /**
      * @ORM\Column(type="text")
-     * Groups('client:read')
+     * @Groups('client:read')
      */
     private $email;
 
     /**
      * @ORM\Column(type="string")
-     * Groups('client:read')
+     * @Groups('client:read')
      */
     private $password;
 
     /**
      * @ORM\Column(type="datetime")
-     * Groups('client:read')
+     * @Groups('client:read')
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
-     * Groups('client:read')
+     * @Groups('client:read')
      */
     private $updatedAt;
 
@@ -75,7 +76,7 @@ class Clients extends abstractController implements UserInterface, PasswordAuthe
 
     public function getUsername()
     {
-        return $this->username;
+        return (string)$this->email;
     }
 
     public function setUsername($username)
@@ -121,6 +122,9 @@ class Clients extends abstractController implements UserInterface, PasswordAuthe
         return $this;
     }
 
+    /**
+     * @see UserInterface
+     */
     public function getPassword():string
     {
         return $this->password;

@@ -6,14 +6,17 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity
  * @ApiResource()
  * @ORM\Table()
+ * @method string getUserIdentifier()
  */
-class Users extends abstractController
+class Users extends abstractController implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
      * @ORM\Column(type="integer")
@@ -78,6 +81,16 @@ class Users extends abstractController
      */
     private $updatedAt;
 
+     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $password;
+
+    /**
+     * @ORM\Column(type="json")
+     */
+    private $roles;
+
 
     public function getId()
     {
@@ -118,6 +131,22 @@ class Users extends abstractController
         $this->email = $email;
 
         return $this;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+        return $this;
+    }
+
+     /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUsername(): string
+    {
+        return (string)$this->email;
     }
 
     public function getPostalcode()
@@ -184,6 +213,13 @@ class Users extends abstractController
         return $this;
     }
 
+     public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
     /**
      * @return DateTime
      */
@@ -197,5 +233,38 @@ class Users extends abstractController
         $this->updatedAt = $updated_at;
 
         return $this;
+    }
+
+     /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function getPassword():string
+    {
+        return $this->password;
+    }
+
+    public function getSalt()
+    {
+        // TODO: Implement getSalt() method.
+    }
+
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
+
+
+    public function __call($name, $arguments)
+    {
+        // TODO: Implement @method string getUserIdentifier()
     }
 }

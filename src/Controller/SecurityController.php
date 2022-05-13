@@ -20,20 +20,14 @@ class SecurityController extends abstractController
 
     public function api_login(Request $request, ClientRepository $clientRepository): JsonResponse
     {
-//        $token = new CsrfToken('authenticate', $credentials['csrf_token']);
-        $data = json_decode($request->request->get('data'));
 
-        $user = $clientRepository->findOneBy([
-            'username' => $data->username,
-            'password' => $data->password
+        $user = $this->getUser();
+
+        return new JsonResponse([
+            'email' => $user->getEmail(),
+            'roles' => $user->getRoles(),
         ]);
 
-        if ($user) {
-            return new JsonResponse(['email' => $user->getEmail()]);
-        } else {
-            throw new CustomUserMessageAuthenticationException('Email could not be found.');
-
-        }
     }
 
 }

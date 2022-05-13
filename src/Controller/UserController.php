@@ -38,6 +38,8 @@ class UserController extends abstractController
      */
     public function getApiUsers(UserRepository $userRepository, SerializerInterface $serializer)
     {
+                dd("ici");
+
         $users = $userRepository->findAll();
 
         $json = $serializer->serialize($users, 'json', ['groups' => 'user:read']);
@@ -93,9 +95,9 @@ class UserController extends abstractController
     /**
      * @Route("/api/v1/customer/add/user", name="addUserToCustomer")
      */
-    public function addUserLinkedToCustomer(Request $request, UserRepository $userRepository, ClientRepository $clientRepository, SerializerInterface $serializer, UserService $userService): Response
+    public function addUserLinkedToCustomer(Request $request, UserService $userService): Response
     {
-        $user_infos = json_decode($request->request->get('user'));
+        $user_infos = json_decode($request->request->get('data'));
 
         $user = new Users();
         $user->setLastname($user_infos->user->lastname);
@@ -104,6 +106,7 @@ class UserController extends abstractController
         $user->setPostalcode($user_infos->user->postal_code);
         $user->setVille($user_infos->user->ville);
         $user->setActif($user_infos->user->actif);
+        $user->setRoles([str_replace('\'', "\"",$user_infos->user->roles)]);
         $user->setClientId($user_infos->user->client_id);
         $user->setCreatedAt(new \DateTimeImmutable('now'));
         $user->setUpdatedAt(new \DateTimeImmutable('now'));
