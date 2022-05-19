@@ -6,6 +6,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -88,6 +89,7 @@ class Users extends abstractController implements UserInterface, PasswordAuthent
 
     /**
      * @ORM\Column(type="json")
+     * @Groups("user:read")
      */
     private $roles;
 

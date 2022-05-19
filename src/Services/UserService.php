@@ -69,4 +69,15 @@ class UserService
             return false;
         }
     }
+
+    public function find($id)
+    {
+        $user = $this->userRepository->find($id);
+
+        if (!$user) {
+            throw new \Exception("L'utilisateur n'a pas pu être supprimé.");
+        }else{
+            return $user;
+        }
+    }
 }

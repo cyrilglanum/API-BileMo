@@ -27,44 +27,44 @@ class Clients extends abstractController implements UserInterface, PasswordAuthe
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=100)
-     * @Groups('client:read')
+     * @ORM\Column(type="string", length=255)
+     * @Groups("client:read")
      */
     private $username;
 
     /**
      * @ORM\Column(type="string", length=100)
-     * @Groups('client:read')
+     * @Groups("client:read")
      */
     private $raisonsociale;
 
     /**
      * @ORM\Column(type="string", length=100)
-     * @Groups('client:read')
+     * @Groups("client:read")
      */
     private $siret;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups('client:read')
+     * @Groups("client:read")
      */
     private $email;
 
     /**
      * @ORM\Column(type="string")
-     * @Groups('client:read')
+     * @Groups("client:read")
      */
     private $password;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups('client:read')
+     * @Groups("client:read")
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups('client:read')
+     * @Groups("client:read")
      */
     private $updatedAt;
 
