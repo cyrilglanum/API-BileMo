@@ -8,11 +8,20 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Serializer\Annotation\Groups;
 use App\Repository;
+use Hateoas\Configuration\Annotation as Hateoas;
+
 
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ArticleRepository")
  * @ApiResource()
+ * @Hateoas\Relation(
+ *      "self",
+ *      href = @Hateoas\Route(
+ *          "article_by_id",
+ *          parameters = { "id" = "expr(object.getId())" }
+ *      )
+ * )
  * @ORM\Table()
  */
 class Article extends abstractController
