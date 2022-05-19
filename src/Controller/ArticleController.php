@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 class ArticleController extends abstractController
 {
     /**
-     * @Route("/api/articles/{id}", name="article_by_id")
+     * @Route("/api/v1/products/{id}", name="article_by_id")
      */
     public function getArticle(ArticleRepository $articleRepository, SerializerInterface $serializer, $id)
     {
@@ -28,7 +28,7 @@ class ArticleController extends abstractController
     }
 
     /**
-     * @Route("/api/articles", name="articles")
+     * @Route("/api/v1/products", name="articles")
      */
     public function getArticles(ArticleRepository $articleRepository, SerializerInterface $serializer)
     {
