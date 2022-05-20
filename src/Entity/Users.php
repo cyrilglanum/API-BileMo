@@ -6,15 +6,32 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation as Serializer;
+use Hateoas\Configuration\Annotation as Hateoas;
+
 
 /**
  * @ORM\Entity
  * @ApiResource()
  * @ORM\Table()
+ * @Hateoas\Relation(
+ *      "self",
+ *      href = @Hateoas\Route(
+ *          "user_by_id",
+ *          parameters = { "id" = "expr(object.getId())" },
+ *          absolute = true
+ *      )
+ * )
+ * @Hateoas\Relation(
+ *      "all",
+ *      href = @Hateoas\Route(
+ *          "users",
+ *          absolute = true
+ *      ),
+ *      embedded = "jwt needed"
+ * )
  * @method string getUserIdentifier()
  */
 class Users extends abstractController implements UserInterface, PasswordAuthenticatedUserInterface
@@ -23,62 +40,72 @@ class Users extends abstractController implements UserInterface, PasswordAuthent
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups("user:read")
+     * @Serializer\Expose()
+
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=100)
-     * @Groups("user:read")
+     * @ORM\Column(type="string",
+     *length=100)     * @Serializer\Expose()
+
      */
     private $lastname;
 
     /**
-     * @ORM\Column(type="string", length=100)
-     * @Groups("user:read")
+     * @ORM\Column(type="string",
+     *length=100)     * @Serializer\Expose()
+
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string")
-     * @Groups("user:read")
+     * @Serializer\Expose()
+
      */
     private $email;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups("user:read")
+     * @Serializer\Expose()
+
      */
     private $postalcode;
 
     /**
-     * @ORM\Column(type="string", length=100)
-     * @Groups("user:read")
+     * @ORM\Column(type="string",
+     *length=100)     * @Serializer\Expose()
+
      */
     private $ville;
 
     /**
-     * @ORM\Column(type="integer", length=100)
-     * @Groups("user:read")
+     * @ORM\Column(type="integer",
+     *length=100)     * @Serializer\Expose()
+
      */
     private $actif;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups("user:read")
+     * @Serializer\Expose()
+
      */
     private $client_id;
 
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups("user:read")
+     * @Serializer\Expose()
+
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups("user:read")
+     * @Serializer\Expose()
+
      */
     private $updatedAt;
 
@@ -89,7 +116,8 @@ class Users extends abstractController implements UserInterface, PasswordAuthent
 
     /**
      * @ORM\Column(type="json")
-     * @Groups("user:read")
+     * @Serializer\Expose()
+
      */
     private $roles;
 

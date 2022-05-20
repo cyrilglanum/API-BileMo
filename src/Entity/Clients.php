@@ -8,12 +8,31 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
+
+use JMS\Serializer\Annotation as Serializer;
+use Hateoas\Configuration\Annotation as Hateoas;
 
 /**
  * @ORM\Entity
  * @ApiResource()
  * @ORM\Table()
+ *  @Hateoas\Relation(
+ *      "self",
+ *      href = @Hateoas\Route(
+ *          "client_by_id",
+ *          parameters = { "id" = "expr(object.getId())" },
+ *          absolute = true
+ *      )
+ * )
+ * @Hateoas\Relation(
+ *      "all",
+ *      href = @Hateoas\Route(
+ *          "clients",
+ *          absolute = true
+ *      ),
+ *      embedded = "jwt needed"
+ * )
+ *
  * @method string getUserIdentifier()
  */
 class Clients extends abstractController implements UserInterface, PasswordAuthenticatedUserInterface
@@ -22,49 +41,49 @@ class Clients extends abstractController implements UserInterface, PasswordAuthe
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups({"client:read"})
+     *
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("client:read")
+     * @Serializer\Expose()
      */
     private $username;
 
     /**
      * @ORM\Column(type="string", length=100)
-     * @Groups("client:read")
+     * @Serializer\Expose()
      */
     private $raisonsociale;
 
     /**
      * @ORM\Column(type="string", length=100)
-     * @Groups("client:read")
+     * @Serializer\Expose()
      */
     private $siret;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups("client:read")
+     * @Serializer\Expose()
      */
     private $email;
 
     /**
      * @ORM\Column(type="string")
-     * @Groups("client:read")
+     * @Serializer\Expose()
      */
     private $password;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups("client:read")
+     * @Serializer\Expose()
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups("client:read")
+     * @Serializer\Expose()
      */
     private $updatedAt;
 
