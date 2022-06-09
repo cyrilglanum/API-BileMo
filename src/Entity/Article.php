@@ -80,6 +80,13 @@ class Article extends abstractController
     private $brand;
 
     /**
+     * @ORM\Column(type="text")
+     * @Serializer\Expose
+     *
+     */
+    private $capacity;
+
+    /**
      * @ORM\Column(type="datetime")
      * @Serializer\Expose
      *
@@ -154,6 +161,18 @@ class Article extends abstractController
     public function setDescription($description)
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getCapacity()
+    {
+        return $this->capacity;
+    }
+
+    public function setCapacity($capacity)
+    {
+        $this->capacity = $capacity;
 
         return $this;
     }

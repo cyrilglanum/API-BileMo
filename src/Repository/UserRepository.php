@@ -21,17 +21,15 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, Users::class);
     }
 
-    public function add(Users $user): bool
+    public function add(Users $user): void
     {
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
-        return true;
     }
 
-    public function delete(Users $user): bool
+    public function delete(Users $user): void
     {
         $this->getEntityManager()->remove($user);
         $this->getEntityManager()->flush();
-        return true;
     }
 }
