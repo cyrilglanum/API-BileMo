@@ -5,8 +5,8 @@ namespace App\Controller;
 use App\Entity\Users;
 use App\Repository\ClientRepository;
 use App\Repository\UserRepository;
+use App\Security\Voter\UserVoter;
 use App\Services\UserService;
-use Doctrine\DBAL\Types\Type;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use JMS\Serializer\SerializerInterface;
-use Symfony\Component\Validator\Constraints\Json;
 
 class UserController extends abstractController
 {
@@ -148,13 +147,14 @@ class UserController extends abstractController
     /**
      * @Route("/api/v1/customer/delete/user", name="deleteUser")
      */
-    public function deleteUserLinkedToCustomer(Request $request, UserService $userService): Response
+    public function deleteUserLinkedToCustomer(Request $request, UserService $userService, UserVoter $postVoter): Response
     {
-
         $userToDelete = $userService->find(json_decode($request->request->get('id')));
 
+         $postVoter->voteForDelete($this->getUser(), 'DELETE');
+
         if ($userToDelete) {
-            if ($this->getUser()->getRoles()[0] === 'ROLE_CLIENT' && $this->getUser()->getClientId() === $userToDelete->getClientId()) {
+            if ($this->getUser()->getClientId() === $userToDelete->getClientId()) {
                 try {
                     $userService->delete($userToDelete);
                 } catch (Exception $e) {
@@ -171,6 +171,10 @@ class UserController extends abstractController
                     "Content-Type" => "application/json"
                 ]);
             }
+        }else{
+                $response = new Response("L'utilisateur que vous essayez de supprimer n'existe pas.", 401, [
+                    "Content-Type" => "application/json"
+                ]);
         }
 
         $response->setPublic();
