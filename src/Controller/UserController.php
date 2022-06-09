@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\SerializerInterface;
+use JMS\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Constraints\Json;
 
 class UserController extends abstractController
@@ -25,7 +25,7 @@ class UserController extends abstractController
     {
         $user = $userRepository->find($id);
 
-        $json = $serializer->serialize($user, 'json', ['groups' => 'user:read']);
+        $json = $serializer->serialize($user, 'json');
 
         $response = new Response($json, 200, [
             "Content-Type" => "application/json"
@@ -41,7 +41,7 @@ class UserController extends abstractController
     {
         $users = $userRepository->findAll();
 
-        $json = $serializer->serialize($users, 'json', ['groups' => 'user:read']);
+        $json = $serializer->serialize($users, 'json');
 
         $response = new Response($json, 200, [
             "Content-Type" => "application/json"
@@ -61,11 +61,14 @@ class UserController extends abstractController
             ['client_id' => $customer->getId()]
         );
 
-        $json = $serializer->serialize($customer_users, 'json', ['groups' => 'user:read']);
+        $json = $serializer->serialize($customer_users, 'json');
 
         $response = new Response($json, 200, [
             "Content-Type" => "application/json"
         ]);
+
+        $response->setPublic();
+        $response->setMaxAge(3600);
 
         return $response;
     }
@@ -126,9 +129,14 @@ class UserController extends abstractController
             ]);
         }
 
-        return new Response("L'utilisateur a bien été ajouté.", 200, [
+        $response = new Response("L'utilisateur a bien été ajouté.", 200, [
             "Content-Type" => "application/json"
         ]);
+
+        $response->setPublic();
+        $response->setMaxAge(3600);
+
+        return $response;
     }
 
     /**
@@ -151,6 +159,9 @@ class UserController extends abstractController
         $response = new Response("L'utilisateur a bien été supprimé.", 200, [
             "Content-Type" => "application/json"
         ]);
+
+        $response->setPublic();
+        $response->setMaxAge(3600);
 
         return $response;
     }

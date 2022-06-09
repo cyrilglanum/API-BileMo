@@ -6,7 +6,7 @@ use App\Repository\ClientRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\SerializerInterface;
+use JMS\Serializer\SerializerInterface;
 
 class ClientController extends abstractController
 {
@@ -17,11 +17,14 @@ class ClientController extends abstractController
     {
         $article = $clientRepository->find($id);
 
-        $json = $serializer->serialize($article, 'json', ['groups' => 'client:read']);
+        $json = $serializer->serialize($article, 'json');
 
-        $response = new Response($json, 200,[
+        $response = new Response($json, 200, [
             "Content-Type" => "application/json"
         ]);
+
+        $response->setPublic();
+        $response->setMaxAge(3600);
 
         return $response;
     }
@@ -33,10 +36,15 @@ class ClientController extends abstractController
     {
         $clients = $clientRepository->findAll();
 
-        $json = $serializer->serialize($clients, 'json', ['groups' => 'client:read']);
+        $json = $serializer->serialize($clients, 'json');
 
-        return new Response($json, 200,[
+        $response = new Response($json, 200, [
             "Content-Type" => "application/json"
         ]);
+
+        $response->setPublic();
+        $response->setMaxAge(3600);
+
+        return $response;
     }
 }

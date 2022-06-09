@@ -5,65 +5,91 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Serializer\Annotation\Groups;
 use App\Repository;
+use Hateoas\Configuration\Annotation as Hateoas;
+use JMS\Serializer\Annotation as Serializer;
 
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ArticleRepository")
  * @ApiResource()
  * @ORM\Table()
+ * @Hateoas\Relation(
+ *      "self",
+ *      href = @Hateoas\Route(
+ *          "article_by_id",
+ *          parameters = { "id" = "expr(object.getId())" },
+ *          absolute = true
+ *      )
+ * )
+ * @Hateoas\Relation(
+ *      "all",
+ *      href = @Hateoas\Route(
+ *          "articles",
+ *          absolute = true
+ *      ),
+ *      embedded = "jwt needed"
+ * )
+ *
+ * @Serializer\ExclusionPolicy("all")
  */
 class Article extends abstractController
 {
     /**
-     * @ORM\Column(type="integer")
      * @ORM\Id
+     * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups("article:read")
+     * @Serializer\Expose()
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=100)
-     * @Groups("article:read")
+     * @Serializer\Expose
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups("article:read")
+     * @Serializer\Expose
+     *
      */
     private $slug;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups("article:read")
+     * @Serializer\Expose
+     *
      */
     private $description;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups("article:read")
+     * @Serializer\Expose
+     *
      */
     private $color;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups("article:read")
+     * @Serializer\Expose
+     *
      */
     private $brand;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups("article:read")
+     * @Serializer\Expose
+     *
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups("article:read")
+     * @Serializer\Expose
+     *
      */
     private $updatedAt;
 
