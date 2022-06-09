@@ -16,26 +16,8 @@ use Hateoas\Configuration\Annotation as Hateoas;
  * @ORM\Entity
  * @ApiResource()
  * @ORM\Table()
- *  @Hateoas\Relation(
- *      "self",
- *      href = @Hateoas\Route(
- *          "client_by_id",
- *          parameters = { "id" = "expr(object.getId())" },
- *          absolute = true
- *      )
- * )
- * @Hateoas\Relation(
- *      "all",
- *      href = @Hateoas\Route(
- *          "clients",
- *          absolute = true
- *      ),
- *      embedded = "jwt needed"
- * )
- *
- * @method string getUserIdentifier()
  */
-class Clients extends abstractController implements UserInterface, PasswordAuthenticatedUserInterface
+class Clients extends abstractController
 {
     /**
      * @ORM\Column(type="integer")
@@ -170,30 +152,5 @@ class Clients extends abstractController implements UserInterface, PasswordAuthe
     public function getUpdatedAt()
     {
         return $this->updatedAt;
-    }
-
-    public function getRoles()
-    {
-        // TODO: Implement getRoles() method.
-    }
-
-    public function getSalt()
-    {
-        // TODO: Implement getSalt() method.
-    }
-
-    public function eraseCredentials()
-    {
-        // TODO: Implement eraseCredentials() method.
-    }
-
-    public function __call($name, $arguments)
-    {
-        // TODO: Implement @method string getUserIdentifier()
-    }
-
-    public function getIdentifier():string
-    {
-        return $this->email;
     }
 }

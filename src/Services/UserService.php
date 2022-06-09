@@ -37,26 +37,22 @@ class UserService
         return false;
     }
 
-    public function add($user): bool
+    public function add($user): void
     {
-        $addUser = $this->userRepository->add($user);
-
-        if ($addUser !== true) {
-            throw new \Exception("L'utilisateur n'a pas pu être inséré.");
+        try {
+            $this->userRepository->add($user);
+        } catch (Exception $e) {
+            throw new Exception("L'utilisateur n'a pas pu être inséré.");
         }
-
-        return true;
     }
 
-    public function delete($user): bool
+    public function delete($user): void
     {
-        $deleteUser = $this->userRepository->delete($user);
-
-        if ($deleteUser !== true) {
-            throw new \Exception("L'utilisateur n'a pas pu être supprimé.");
+        try {
+            $this->userRepository->delete($user);
+        } catch (Exception $e) {
+            throw new Exception("L'utilisateur n'a pas pu être supprimé.");
         }
-
-        return true;
     }
 
     public function findByMail($mail)
