@@ -150,7 +150,6 @@ class UserController extends abstractController
      */
     public function deleteUserLinkedToCustomer(Request $request, UserService $userService): Response
     {
-
         $userToDelete = $userService->find(json_decode($request->request->get('id')));
 
         if ($userToDelete) {
