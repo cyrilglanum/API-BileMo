@@ -31,6 +31,9 @@ class UserController extends abstractController
             "Content-Type" => "application/json"
         ]);
 
+        $response->setPublic();
+        $response->setMaxAge(3600);
+
         return $response;
     }
 
@@ -46,6 +49,9 @@ class UserController extends abstractController
         $response = new Response($json, 200, [
             "Content-Type" => "application/json"
         ]);
+
+        $response->setPublic();
+        $response->setMaxAge(3600);
 
         return $response;
     }
@@ -99,10 +105,12 @@ class UserController extends abstractController
      */
     public function addUserLinkedToCustomer(Request $request, UserService $userService, UserPasswordHasherInterface $userPasswordHasher): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN', $this->getUser()->getRoles());
+
         $user_infos = json_decode($request->request->get('user'));
         $user_roles = json_decode($request->request->get('roles'));
 
-        if ($this->getUser()->getRoles()[0] === 'ROLE_CLIENT' && $this->getUser()->getClientId() === json_decode($request->request->get('customer_id'))) {
+        if ($this->getUser()->getClientId() === json_decode($request->request->get('customer_id'))) {
 
             $user = new Users();
 
@@ -150,27 +158,23 @@ class UserController extends abstractController
      */
     public function deleteUserLinkedToCustomer(Request $request, UserService $userService): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN', $this->getUser()->getRoles());
 
         $userToDelete = $userService->find(json_decode($request->request->get('id')));
 
         if ($userToDelete) {
-            if ($this->getUser()->getRoles()[0] === 'ROLE_CLIENT' && $this->getUser()->getClientId() === $userToDelete->getClientId()) {
-                try {
-                    $userService->delete($userToDelete);
-                } catch (Exception $e) {
-                    return new Response($e->getMessage(), 403, [
-                        "Content-Type" => "application/json"
-                    ]);
-                }
 
-                $response = new Response("L'utilisateur a bien été supprimé.", 200, [
-                    "Content-Type" => "application/json"
-                ]);
-            } else {
-                $response = new Response("Vous n'êtes pas autorisé à effectuer cette action.", 401, [
+            try {
+                $userService->delete($userToDelete);
+            } catch (Exception $e) {
+                return new Response($e->getMessage(), 403, [
                     "Content-Type" => "application/json"
                 ]);
             }
+
+            $response = new Response("L'utilisateur a bien été supprimé.", 200, [
+                "Content-Type" => "application/json"
+            ]);
         }
 
         $response->setPublic();

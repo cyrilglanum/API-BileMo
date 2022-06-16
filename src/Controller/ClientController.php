@@ -35,7 +35,6 @@ class ClientController extends abstractController
     public function getClients(ClientRepository $clientRepository, SerializerInterface $serializer)
     {
 
-        dd($this->getUser());
         if ($this->getUser()->getRoles()[0] === 'ROLE_CLIENT' && (string)$this->getUser()->getRoles() === '[ROLE_ADMIN]'){
             $clients = $clientRepository->findAll();
 
