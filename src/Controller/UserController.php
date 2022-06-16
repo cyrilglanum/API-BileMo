@@ -79,27 +79,6 @@ class UserController extends abstractController
         return $response;
     }
 
-//    /**
-//     * @Route("/api/v1/customer/{customer_id}/user/{id}", name="userFromCustomer")
-//     */
-//    public function getUserLinkedToCustomer(UserRepository $userRepository, ClientRepository $clientRepository, SerializerInterface $serializer, $customer_id, $id): Response
-//    {
-//        $customer = $clientRepository->find($customer_id);
-//
-//        $customer_user = $userRepository->findOneBy([
-//                'client_id' => $customer->getId(),
-//                'id' => $id]
-//        );
-//
-//        $json = $serializer->serialize($customer_user, 'json', ['groups' => 'user:read']);
-//
-//        $response = new Response($json, 200, [
-//            "Content-Type" => "application/json"
-//        ]);
-//
-//        return $response;
-//    }
-
     /**
      * @Route("/api/v1/customer/add/user", name="addUserToCustomer")
      */
