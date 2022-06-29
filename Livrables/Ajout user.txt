@@ -1,0 +1,17 @@
+title Ajouter un nouvel utilisateur
+
+Client->Système:Login
+Système->JWT:JWT generation
+Système<--JWT:retour generation JWT
+Client<--Système:retour generation JWT
+
+Client->Système:Post/api/add/users (json & jwt)
+Client<--Système:Vérification des données(json)
+
+alt cas 1 correct Token auth / Data 
+Système->BDD:Envoi / Insertion base de données 
+Système<--BDD:Utilisateur créé
+Client<--Système:Utilisateur créé (code:200)
+else cas 2 Token auth correct / Data incorrecte
+Client<--Système: Error data / token auth (code :401)
+end

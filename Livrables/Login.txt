@@ -1,0 +1,11 @@
+title Login
+
+Client->Système:GET/api/login
+Système->BDD:Recherche BDD id/password
+alt cas1 Utilisateur trouvé
+Système<--BDD:Retour liste articles
+Client<--Système:Jeton JWT (code:200)
+else cas 2 Utilisateur non trouvé
+Client<--Système:Error (code:400)
+end
+

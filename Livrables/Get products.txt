@@ -1,0 +1,22 @@
+title Récupérer liste des articles
+
+Client->Système:Login
+Système->JWT:JWT generation
+Système<--JWT:retour generation JWT
+Client<--Système:retour generation JWT
+
+Client->Système:Get/api/get/products
+Client<--Système:Vérification des données(json)
+Système->JWT:Contrôle JWT
+
+alt cas 1 correct Token auth / Data 
+Système<--JWT:JWT Ok - Authentifié
+Système->BDD:Récupération en base de données 
+Système<--BDD:Retour liste articles
+Client<--Système:Products (code:200)
+else cas 2 Token auth correct / Data incorrecte
+Système<--JWT: Error data / token auth (code :401)
+Système-->Client : Error 401 JWT - Invalid
+end
+
+

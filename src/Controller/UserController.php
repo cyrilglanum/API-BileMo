@@ -25,6 +25,12 @@ class UserController extends abstractController
     {
         $user = $userRepository->find($id);
 
+        if ($user === null) {
+            return new Response("Aucun utilisateur trouvé avec cet identifiant.", 200, [
+                "Content-Type" => "application/json"
+            ]);
+        }
+
         $json = $serializer->serialize($user, 'json');
 
         $response = new Response($json, 200, [
@@ -43,6 +49,12 @@ class UserController extends abstractController
     public function getApiUsers(UserRepository $userRepository, SerializerInterface $serializer)
     {
         $users = $userRepository->findAll();
+
+        if ($users === null) {
+            return new Response("Aucun utilisateur trouvé.", 200, [
+                "Content-Type" => "application/json"
+            ]);
+        }
 
         $json = $serializer->serialize($users, 'json');
 
@@ -63,9 +75,21 @@ class UserController extends abstractController
     {
         $customer = $clientRepository->find($customer_id);
 
+        if ($customer === null) {
+            return new Response("Le client n'existe pas.", 200, [
+                "Content-Type" => "application/json"
+            ]);
+        }
+
         $customer_users = $userRepository->findBy(
             ['client_id' => $customer->getId()]
         );
+
+        if ($customer_users === null) {
+            return new Response("Aucun utilisateur relié à ce client n'a été trouvé.", 200, [
+                "Content-Type" => "application/json"
+            ]);
+        }
 
         $json = $serializer->serialize($customer_users, 'json');
 
@@ -84,13 +108,12 @@ class UserController extends abstractController
      */
     public function addUserLinkedToCustomer(Request $request, UserService $userService, UserPasswordHasherInterface $userPasswordHasher): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN', $this->getUser()->getRoles());
+        $this->denyAccessUnlessGranted('ROLE_CLIENT', $this->getUser()->getRoles());
 
         $user_infos = json_decode($request->request->get('user'));
         $user_roles = json_decode($request->request->get('roles'));
 
-        if ($this->getUser()->getClientId() === json_decode($request->request->get('customer_id'))) {
-
+        if ($this->getUser()->getClientId() === json_decode($request->request->get('client_id'))) {
             $user = new Users();
 
             $user->setLastname(htmlentities($user_infos->lastname));
@@ -100,7 +123,7 @@ class UserController extends abstractController
             $user->setVille(htmlentities($user_infos->ville));
             $user->setActif($user_infos->actif);
             $user->setRoles([str_replace('\'', "\"", $user_roles->roles ?? "ROLE_USER")]);
-            $user->setClientId(json_decode($request->request->get('customer_id')));
+            $user->setClientId(json_decode($request->request->get('client_id')));
             $user->setCreatedAt(new \DateTimeImmutable('now'));
             $user->setUpdatedAt(new \DateTimeImmutable('now'));
             $user->setPassword($userPasswordHasher->hashPassword($user, $user_infos->password));
@@ -127,15 +150,14 @@ class UserController extends abstractController
             return $response;
         }
 
-        return new Response("Vous n'êtes pas autorisé à effectuer cette action.", 401, [
-            "Content-Type" => "application/json"
-        ]);
+        return new Response("Vous n'êtes pas autorisé à effectuer cette action.", 401, ["Content-Type" => "application/json"]);
     }
 
     /**
      * @Route("/api/v1/customer/delete/user", name="deleteUser")
      */
-    public function deleteUserLinkedToCustomer(Request $request, UserService $userService): Response
+    public
+    function deleteUserLinkedToCustomer(Request $request, UserService $userService): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN', $this->getUser()->getRoles());
 

@@ -1,0 +1,17 @@
+title Supprimer un utilisateur
+
+Client->Système:Login
+Système->JWT:JWT generation
+Système<--JWT:retour generation JWT
+Client<--Système:retour generation JWT
+
+Client->Système:Post/api/delete/{id}&token
+Client<--Système:Vérification des données(json, jwt)
+
+alt cas 1 correct Token auth / Data 
+Système->BDD:Récupération en base de données 
+Système<--BDD:Utilisateur supprimé
+Client<--Système:Utilisateur supprimé (code:200)
+else cas 2 Token auth correct / Data incorrecte
+Client<--Système: Error data / token auth (code :400)
+end

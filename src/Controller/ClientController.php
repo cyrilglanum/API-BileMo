@@ -11,13 +11,19 @@ use JMS\Serializer\SerializerInterface;
 class ClientController extends abstractController
 {
     /**
-     * @Route("/api/v1/clients/{id}", name="client_by_id")
+     * @Route("/api/v1/client/{id}", name="client_by_id")
      */
     public function getClient(ClientRepository $clientRepository, SerializerInterface $serializer, $id)
     {
-        $article = $clientRepository->find($id);
+        $client = $clientRepository->find($id);
 
-        $json = $serializer->serialize($article, 'json');
+        if ($client === null) {
+            return new Response("Aucun client trouvé", 200, [
+                "Content-Type" => "application/json"
+            ]);
+        }
+
+        $json = $serializer->serialize($client, 'json');
 
         $response = new Response($json, 200, [
             "Content-Type" => "application/json"
@@ -34,9 +40,14 @@ class ClientController extends abstractController
      */
     public function getClients(ClientRepository $clientRepository, SerializerInterface $serializer)
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN', $this->getUser()->getRoles());
+        $clients = $clientRepository->findAll();
 
-        if ($this->getUser()->getRoles()[0] === 'ROLE_CLIENT' && (string)$this->getUser()->getRoles() === '[ROLE_ADMIN]'){
-            $clients = $clientRepository->findAll();
+        if($clients === null){
+            return new Response("Aucun clients trouvé", 200, [
+                "Content-Type" => "application/json"
+            ]);
+        }
 
         $json = $serializer->serialize($clients, 'json');
 
@@ -48,7 +59,5 @@ class ClientController extends abstractController
         $response->setMaxAge(3600);
 
         return $response;
-            }
-
     }
 }
