@@ -41,75 +41,70 @@ class Users extends abstractController implements UserInterface, PasswordAuthent
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Serializer\Expose()
-
      */
     private $id;
 
     /**
      * @ORM\Column(type="string",
      *length=100)     * @Serializer\Expose()
-
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="string",
      *length=100)     * @Serializer\Expose()
-
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string")
      * @Serializer\Expose()
-
      */
     private $email;
 
     /**
      * @ORM\Column(type="integer")
      * @Serializer\Expose()
-
      */
     private $postalcode;
 
     /**
      * @ORM\Column(type="string",
      *length=100)     * @Serializer\Expose()
-
      */
     private $ville;
 
     /**
      * @ORM\Column(type="integer",
      *length=100)     * @Serializer\Expose()
-
      */
     private $actif;
 
     /**
      * @ORM\Column(type="integer")
      * @Serializer\Expose()
-
      */
     private $client_id;
 
+    /**
+     * @ORM\Column(type="string",
+     *length=100)     * @Serializer\Expose()
+     */
+    private $token;
 
     /**
      * @ORM\Column(type="datetime")
      * @Serializer\Expose()
-
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
      * @Serializer\Expose()
-
      */
     private $updatedAt;
 
-     /**
+    /**
      * @ORM\Column(type="string", length=255)
      */
     private $password;
@@ -117,7 +112,6 @@ class Users extends abstractController implements UserInterface, PasswordAuthent
     /**
      * @ORM\Column(type="json")
      * @Serializer\Expose()
-
      */
     private $roles;
 
@@ -169,7 +163,7 @@ class Users extends abstractController implements UserInterface, PasswordAuthent
         return $this;
     }
 
-     /**
+    /**
      * A visual identifier that represents this user.
      *
      * @see UserInterface
@@ -227,6 +221,18 @@ class Users extends abstractController implements UserInterface, PasswordAuthent
         return $this;
     }
 
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    public function setToken($token)
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
     /**
      * @return DateTime
      */
@@ -243,7 +249,7 @@ class Users extends abstractController implements UserInterface, PasswordAuthent
         return $this;
     }
 
-     public function setRoles(array $roles): self
+    public function setRoles(array $roles): self
     {
         $this->roles = $roles;
 
@@ -265,7 +271,7 @@ class Users extends abstractController implements UserInterface, PasswordAuthent
         return $this;
     }
 
-     /**
+    /**
      * @see UserInterface
      */
     public function getRoles(): array
@@ -277,7 +283,7 @@ class Users extends abstractController implements UserInterface, PasswordAuthent
         return array_unique($roles);
     }
 
-    public function getPassword():string
+    public function getPassword(): string
     {
         return $this->password;
     }
