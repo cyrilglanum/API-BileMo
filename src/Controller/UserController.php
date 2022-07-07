@@ -6,7 +6,6 @@ use App\Entity\Users;
 use App\Repository\ClientRepository;
 use App\Repository\UserRepository;
 use App\Services\UserService;
-use Doctrine\DBAL\Types\Type;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,7 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use JMS\Serializer\SerializerInterface;
-use Symfony\Component\Validator\Constraints\Json;
 
 class UserController extends abstractController
 {
@@ -114,9 +112,10 @@ class UserController extends abstractController
         
         $user_infos = json_decode($request->get('user'));
         $user_roles = json_decode($request->request->get('roles'));
+        $client_id = json_decode($request->request->get('client_id'));
 
         if ($role === 'client') {
-            if ($this->getUser()->getClientId() !== json_decode($request->request->get('client_id'))) {
+            if ($this->getUser()->getClientId() !== $client_id) {
                 return new Response("Vous n'êtes pas autorisé à effectuer cette action.", 401, ["Content-Type" => "application/json"]);
             }
         }
@@ -127,14 +126,14 @@ class UserController extends abstractController
         $user->setFirstname(htmlentities($user_infos->firstname));
         $user->setEmail(htmlentities($user_infos->email));
 
-        if(!is_int($user_infos->postal_code)){
+        if(!is_int($user_infos->postal_code || $user_infos->actif || $client_id)){
             return new Response("Données incorrectes.", 401, ["Content-Type" => "application/json"]);
         }
         $user->setPostalcode($user_infos->postal_code);
         $user->setVille(htmlentities($user_infos->ville));
         $user->setActif($user_infos->actif);
         $user->setRoles([str_replace('\'', "\"", $user_roles->roles ?? "ROLE_USER")]);
-        $user->setClientId(json_decode($request->request->get('client_id')));
+        $user->setClientId($client_id);
         $user->setCreatedAt(new \DateTimeImmutable('now'));
         $user->setUpdatedAt(new \DateTimeImmutable('now'));
         $user->setPassword($userPasswordHasher->hashPassword($user, $user_infos->password));
@@ -168,6 +167,10 @@ class UserController extends abstractController
     function deleteUserLinkedToCustomer(Request $request, UserService $userService): Response
     {
         $this->denyAccessUnlessGranted('delete', $this->getUser());
+
+        if(!is_int(json_decode($request->request->get('id')))){
+            return new Response("Données incorrectes.", 401, ["Content-Type" => "application/json"]);
+        }
 
         $userToDelete = $userService->find(json_decode($request->request->get('id')));
 
