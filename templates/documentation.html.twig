@@ -1,0 +1,299 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+<div class="container mt-5">
+    <h1 class="text-center">Documentation api</h1>
+    <div class="login" style="padding-top: 20px">
+        <h2 class="my-3">Login</h2>
+        <span class="badge text-bg-warning my-3">POST</span>
+
+        <div class="form-group">
+            <h4 class="my-2"> URL : http://local.bilemo.com/api/login_check</h4>
+            <input type="email" class="form-control" value="api/login_check">
+        </div>
+
+        <h4 class="my-2">Paramètres : </h4>
+        <b>username</b> : Identifiant de l'utilisateur <br>
+        <b>password</b> : Mot de passe <br>
+        <hr>
+
+        <div class="mt-5">
+            <h4> Code <span class="badge text-bg-success">200</span></h4>
+            <h4 class="mt-4"> Réponse : </h4>
+            <code style="color:green"> [<br>'status' =&gt; 200,<br>
+                'data' =&gt; [ <br>
+                  'JWT token' =&gt; "$token" ,
+                <br> ]</code>
+            <h3></h3>
+        </div>
+        <div class="mt-5">
+
+            <h4> Code <span class="badge text-bg-danger">401</span></h4>
+            <h4 class="mt-4"> Réponse : </h4>
+            <code> [<br>'status' =&gt; 401,<br>
+                'data' =&gt; [ <br>
+                  'message' =&gt; ""Invalid credentials." ,
+                <br> ]</code>
+            <h3></h3>
+        </div>
+
+    </div>
+    <div class="getClients" style="padding-top: 20px">
+        <h2 class="my-3">getClients</h2>
+        <span class="badge text-bg-warning my-3">GET</span>
+
+        <div class="form-group">
+            <h4 class="my-2"> URL : http://local.bilemo.com/api/v1/clients</h4>
+            <input type="email" class="form-control" value="api/v1/clients">
+        </div>
+
+        <h4 class="my-2">Paramètres : </h4>
+        <b>authorization</b> : JWT TOKEN <br>
+        <hr>
+
+        <div class="mt-5">
+            <h4> Code <span class="badge text-bg-success">200</span></h4>
+            <h4 class="mt-4"> Réponse : </h4>
+            <code style="color:green"> [<br>'status' =&gt; 200,<br>
+                'data' =&gt; [ <br>
+                  'Clients' =&gt; "[clients]" ,
+                <br> ]</code>
+            <h3></h3>
+        </div>
+        <div class="mt-5">
+            <h4> Code <span class="badge text-bg-danger">401</span></h4>
+            <h4 class="mt-4"> Réponse : </h4>
+            <code> [<br>'status' =&gt; 401,<br>
+                'data' =&gt; [ <br>
+                  'message' =&gt; ""Invalid credentials." ,
+                <br> ]</code>
+            <h3></h3>
+        </div>
+    </div>
+    <div class="getClient" style="padding-top: 20px">
+        <h2 class="my-3">getClient</h2>
+        <span class="badge text-bg-warning my-3">GET</span>
+
+        <div class="form-group">
+            <h4 class="my-2"> URL : http://local.bilemo.com/api/v1/client/{id}</h4>
+            <input type="email" class="form-control" value="/api/v1/client/{id}">
+        </div>
+
+        <h4 class="my-2">Paramètres : </h4>
+        <b>authorization</b> : JWT TOKEN <br>
+        <b>id</b> : $user_id <br>
+        <hr>
+
+        <div class="mt-5">
+            <h4> Code <span class="badge text-bg-success">200</span></h4>
+            <h4 class="mt-4"> Réponse : </h4>
+            <code style="color:green"> [<br>'status' =&gt; 200,<br>
+                'data' =&gt; [ <br>
+                  'Client' =&gt; "[client]" ,
+                <br> ]</code>
+            <h3></h3>
+        </div>
+        <div class="mt-5">
+            <h4> Code <span class="badge text-bg-danger">401</span></h4>
+            <h4 class="mt-4"> Réponse : </h4>
+            <code> [<br>'status' =&gt; 401,<br>
+                'data' =&gt; [ <br>
+                  'message' =&gt; ""Invalid credentials." ,
+                <br> ]</code>
+            <h3></h3>
+        </div>
+    </div>
+    <div class="getUsers" style="padding-top: 20px">
+        <h2 class="my-3">getUsers</h2>
+        <span class="badge text-bg-warning my-3">GET</span>
+
+        <div class="form-group">
+            <h4 class="my-2"> URL : http://local.bilemo.com/api/v1/users</h4>
+            <input type="email" class="form-control" value="api/v1/users">
+        </div>
+
+        <h4 class="my-2">Paramètres : </h4>
+        <b>authorization</b> : JWT TOKEN <br>
+        <hr>
+
+        <div class="mt-5">
+            <h4> Code <span class="badge text-bg-success">200</span></h4>
+            <h4 class="mt-4"> Réponse : </h4>
+            <code style="color:green"> [<br>'status' =&gt; 200,<br>
+                'data' =&gt; [ <br>
+                  'Users' =&gt; "[users]" ,
+                <br> ]</code>
+            <h3></h3>
+        </div>
+        <div class="mt-5">
+            <h4> Code <span class="badge text-bg-danger">401</span></h4>
+            <h4 class="mt-4"> Réponse : </h4>
+            <code> [<br>'status' =&gt; 401,<br>
+                'data' =&gt; [ <br>
+                  'message' =&gt; ""Invalid credentials." ,
+                <br> ]</code>
+            <h3></h3>
+        </div>
+    </div>
+    <div class="getUser" style="padding-top: 20px">
+        <h2 class="my-3">getUser</h2>
+        <span class="badge text-bg-warning my-3">GET</span>
+
+        <div class="form-group">
+            <h4 class="my-2"> URL : http://local.bilemo.com/api/v1/user/{id}</h4>
+            <input type="email" class="form-control" value="/api/v1/user/{id}">
+        </div>
+
+        <h4 class="my-2">Paramètres : </h4>
+        <b>authorization</b> : JWT TOKEN <br>
+        <b>id</b> : $user_id <br>
+        <hr>
+
+        <div class="mt-5">
+            <h4> Code <span class="badge text-bg-success">200</span></h4>
+            <h4 class="mt-4"> Réponse : </h4>
+            <code style="color:green"> [<br>'status' =&gt; 200,<br>
+                'data' =&gt; [ <br>
+                  'User' =&gt; "[user]" ,
+                <br> ]</code>
+            <h3></h3>
+        </div>
+        <div class="mt-5">
+            <h4> Code <span class="badge text-bg-danger">401</span></h4>
+            <h4 class="mt-4"> Réponse : </h4>
+            <code> [<br>'status' =&gt; 401,<br>
+                'data' =&gt; [ <br>
+                  'message' =&gt; ""Invalid credentials." ,
+                <br> ]</code>
+            <h3></h3>
+        </div>
+    </div>
+    <div class="getProducts" style="padding-top: 20px">
+        <h2 class="my-3">getProducts</h2>
+        <span class="badge text-bg-warning my-3">GET</span>
+
+        <div class="form-group">
+            <h4 class="my-2"> URL : http://local.bilemo.com/api/v1/products</h4>
+            <input type="email" class="form-control" value="api/v1/products">
+        </div>
+
+        <h4 class="my-2">Paramètres : </h4>
+        <b>authorization</b> : JWT TOKEN <br>
+        <hr>
+
+        <div class="mt-5">
+            <h4> Code <span class="badge text-bg-success">200</span></h4>
+            <h4 class="mt-4"> Réponse : </h4>
+            <code style="color:green"> [<br>'status' =&gt; 200,<br>
+                'data' =&gt; [ <br>
+                  'Products' =&gt; "[products]" ,
+                <br> ]</code>
+            <h3></h3>
+        </div>
+        <div class="mt-5">
+            <h4> Code <span class="badge text-bg-danger">401</span></h4>
+            <h4 class="mt-4"> Réponse : </h4>
+            <code> [<br>'status' =&gt; 401,<br>
+                'data' =&gt; [ <br>
+                  'message' =&gt; ""Invalid credentials." ,
+                <br> ]</code>
+            <h3></h3>
+        </div>
+    </div>
+    <div class="getProduct" style="padding-top: 20px">
+        <h2 class="my-3">getProduct</h2>
+        <span class="badge text-bg-warning my-3">GET</span>
+
+        <div class="form-group">
+            <h4 class="my-2"> URL : http://local.bilemo.com/api/v1/product/{id}</h4>
+            <input type="email" class="form-control" value="/api/v1/product/{id}">
+        </div>
+
+        <h4 class="my-2">Paramètres : </h4>
+        <b>authorization</b> : JWT TOKEN <br>
+        <b>id</b> : $user_id <br>
+        <hr>
+
+        <div class="mt-5">
+            <h4> Code <span class="badge text-bg-success">200</span></h4>
+            <h4 class="mt-4"> Réponse : </h4>
+            <code style="color:green"> [<br>'status' =&gt; 200,<br>
+                'data' =&gt; [ <br>
+                  'Product' =&gt; "[product]" ,
+                <br> ]</code>
+            <h3></h3>
+        </div>
+        <div class="mt-5">
+            <h4> Code <span class="badge text-bg-danger">401</span></h4>
+            <h4 class="mt-4"> Réponse : </h4>
+            <code> [<br>'status' =&gt; 401,<br>
+                'data' =&gt; [ <br>
+                  'message' =&gt; ""Invalid credentials." ,
+                <br> ]</code>
+            <h3></h3>
+        </div>
+    </div>
+    <div class="addUser" style="padding-top: 20px">
+        <h2 class="my-3">addUser</h2>
+        <span class="badge text-bg-warning my-3">GET</span>
+
+        <div class="form-group">
+            <h4 class="my-2"> URL : http://local.bilemo.com/api/v1/customer/add/user</h4>
+            <input type="email" class="form-control" value="api/v1/customer/add/user">
+        </div>
+
+        <h4 class="my-2">Paramètres : </h4>
+        <b>authorization</b> : JWT TOKEN <br>
+        <hr>
+
+        <div class="mt-5">
+            <h4> Code <span class="badge text-bg-success">200</span></h4>
+            <h4 class="mt-4"> Réponse : </h4>
+            <code style="color:green"> [<br>'status' =&gt; 200,<br>
+                'data' =&gt; [ <br>
+                  'Message' =&gt; "L'utilisateur a bien été ajouté." ,
+                <br> ]</code>
+            <h3></h3>
+        </div>
+        <div class="mt-5">
+            <h4> Code <span class="badge text-bg-danger">401</span></h4>
+            <h4 class="mt-4"> Réponse : </h4>
+            <code> [<br>'status' =&gt; 401,<br>
+                'data' =&gt; [ <br>
+                  'message' =&gt; ""Invalid credentials." ,
+                <br> ]</code>
+            <h3></h3>
+        </div>
+    </div>
+    <div class="deleteUser" style="padding-top: 20px">
+        <h2 class="my-3">deleteUser</h2>
+        <span class="badge text-bg-warning my-3">GET</span>
+
+        <div class="form-group">
+            <h4 class="my-2"> URL : http://local.bilemo.com/api/v1/customer/delete/user</h4>
+            <input type="email" class="form-control" value="api/v1/customer/delete/user">
+        </div>
+
+        <h4 class="my-2">Paramètres : </h4>
+        <b>authorization</b> : JWT TOKEN <br>
+        <hr>
+
+        <div class="mt-5">
+            <h4> Code <span class="badge text-bg-success">200</span></h4>
+            <h4 class="mt-4"> Réponse : </h4>
+            <code style="color:green"> [<br>'status' =&gt; 200,<br>
+                'data' =&gt; [ <br>
+                  'Message' =&gt; "L'utilisateur a bien été supprimé." ,
+                <br> ]</code>
+            <h3></h3>
+        </div>
+        <div class="mt-5">
+            <h4> Code <span class="badge text-bg-danger">401</span></h4>
+            <h4 class="mt-4"> Réponse : </h4>
+            <code> [<br>'status' =&gt; 401,<br>
+                'data' =&gt; [ <br>
+                  'message' =&gt; ""Invalid credentials." ,
+                <br> ]</code>
+            <h3></h3>
+        </div>
+    </div>
+</div>

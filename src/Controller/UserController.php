@@ -44,7 +44,7 @@ class UserController extends abstractController
     }
 
     /**
-     * @Route("/api/users/all", name="users")
+     * @Route("/api/users", name="users")
      */
     public function getApiUsers(UserRepository $userRepository, SerializerInterface $serializer)
     {
@@ -111,8 +111,9 @@ class UserController extends abstractController
         $this->denyAccessUnlessGranted('add', $this->getUser());
 
         $role = $this->checkRole($this->getUser());
-
-        $user_infos = json_decode($request->request->get('user'));
+        
+        $user_infos = json_decode($request->get('user'));
+        $user_roles = json_decode($request->request->get('roles'));
 
         if ($role === 'client') {
             if ($this->getUser()->getClientId() !== json_decode($request->request->get('client_id'))) {
@@ -125,6 +126,10 @@ class UserController extends abstractController
         $user->setLastname(htmlentities($user_infos->lastname));
         $user->setFirstname(htmlentities($user_infos->firstname));
         $user->setEmail(htmlentities($user_infos->email));
+
+        if(!is_int($user_infos->postal_code)){
+            return new Response("Données incorrectes.", 401, ["Content-Type" => "application/json"]);
+        }
         $user->setPostalcode($user_infos->postal_code);
         $user->setVille(htmlentities($user_infos->ville));
         $user->setActif($user_infos->actif);
