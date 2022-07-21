@@ -17,7 +17,7 @@ use JMS\Serializer\SerializerInterface;
 class UserController extends abstractController
 {
     /**
-     * @Route("/api/v1/users/{id}", name="user_by_id")
+     * @Route("/api/v1/users/{id}", name="user_by_id", methods={"GET"})
      */
     public function getApiUser(UserRepository $userRepository, SerializerInterface $serializer, $id)
     {
@@ -42,7 +42,7 @@ class UserController extends abstractController
     }
 
     /**
-     * @Route("/api/users", name="users")
+     * @Route("/api/users", name="users", methods={"GET"})
      */
     public function getApiUsers(UserRepository $userRepository, SerializerInterface $serializer)
     {
@@ -67,7 +67,7 @@ class UserController extends abstractController
     }
 
     /**
-     * @Route("/api/v1/customer/{customer_id}/users", name="usersByCustomer")
+     * @Route("/api/v1/customer/{customer_id}/users", name="usersByCustomer", methods={"GET"})
      */
     public function getUsersLinkedToCustomer(UserRepository $userRepository, ClientRepository $clientRepository, SerializerInterface $serializer, $customer_id): Response
     {
@@ -102,7 +102,7 @@ class UserController extends abstractController
     }
 
     /**
-     * @Route("/api/v1/customer/add/user", name="addUserToCustomer")
+     * @Route("/api/v1/user", name="addUserToCustomer", methods={"POST"})
      */
     public function addUserLinkedToCustomer(Request $request, UserService $userService, UserPasswordHasherInterface $userPasswordHasher): Response
     {
@@ -126,7 +126,7 @@ class UserController extends abstractController
         $user->setFirstname(htmlentities($user_infos->firstname));
         $user->setEmail(htmlentities($user_infos->email));
 
-        if(!is_int($user_infos->postal_code || $user_infos->actif || $client_id)){
+        if(!(is_int($user_infos->postal_code) && is_int($user_infos->actif) && is_int($client_id))){
             return new Response("Données incorrectes.", 401, ["Content-Type" => "application/json"]);
         }
         $user->setPostalcode($user_infos->postal_code);
@@ -161,18 +161,17 @@ class UserController extends abstractController
     }
 
     /**
-     * @Route("/api/v1/customer/delete/user", name="deleteUser")
+     * @Route("/api/v1/user/{id}", name="deleteUser", methods={"DELETE"})
      */
-    public
-    function deleteUserLinkedToCustomer(Request $request, UserService $userService): Response
+    public function deleteUserLinkedToCustomer(Request $request, UserService $userService): Response
     {
         $this->denyAccessUnlessGranted('delete', $this->getUser());
 
-        if(!is_int(json_decode($request->request->get('id')))){
+        if(!is_int((int)$request->get('id'))){
             return new Response("Données incorrectes.", 401, ["Content-Type" => "application/json"]);
         }
 
-        $userToDelete = $userService->find(json_decode($request->request->get('id')));
+        $userToDelete = $userService->find((int)$request->get('id'));
 
         $role = $this->checkRole($this->getUser());
 

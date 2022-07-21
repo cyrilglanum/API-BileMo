@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class GeneralController extends abstractController
 {
     /**
-     * @Route("/documentation/api", name="documentation")
+     * @Route("/documentation/api", name="documentation", methods={"GET"})
      */
     public function documentation(){
 

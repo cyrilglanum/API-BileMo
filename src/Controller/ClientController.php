@@ -11,7 +11,7 @@ use JMS\Serializer\SerializerInterface;
 class ClientController extends abstractController
 {
     /**
-     * @Route("/api/v1/client/{id}", name="client_by_id")
+     * @Route("/api/v1/client/{id}", name="client_by_id", methods={"GET"})
      */
     public function getClient(ClientRepository $clientRepository, SerializerInterface $serializer, $id)
     {
@@ -36,7 +36,7 @@ class ClientController extends abstractController
     }
 
     /**
-     * @Route("/api/v1/clients", name="clients")
+     * @Route("/api/v1/clients", name="clients", methods={"GET"})
      */
     public function getClients(ClientRepository $clientRepository, SerializerInterface $serializer)
     {

@@ -14,7 +14,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends abstractController
 {
     /**
-     * @Route(name="api_login", path="/api/login_check")
+     * @Route(name="api_login", path="/api/login_check", methods={"POST"})
      * @return JsonResponse
      */
 

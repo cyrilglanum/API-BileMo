@@ -58,7 +58,14 @@ Exemple Wamp
 
 #### Database
 [Bilemo SQL](bilemoapi.sql) 
+
 ```bash
 Importer le fichier SQL ci-dessus dans la base de données pour importer 
 toutes les données de test.
+```
+
+### Documentation API - URL 
+
+```bash
+/documentation/api
 ```
