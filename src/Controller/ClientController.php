@@ -11,7 +11,7 @@ use JMS\Serializer\SerializerInterface;
 class ClientController extends abstractController
 {
     /**
-     * @Route("/api/v1/client/{id}", name="client_by_id", methods={"GET"})
+     * @Route("/api/v1/clients/{id}", name="clientById", methods={"GET"})
      */
     public function getClient(ClientRepository $clientRepository, SerializerInterface $serializer, $id)
     {

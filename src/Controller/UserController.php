@@ -17,7 +17,7 @@ use JMS\Serializer\SerializerInterface;
 class UserController extends abstractController
 {
     /**
-     * @Route("/api/v1/users/{id}", name="user_by_id", methods={"GET"})
+     * @Route("/api/v1/users/{id}", name="userById", methods={"GET"})
      */
     public function getApiUser(UserRepository $userRepository, SerializerInterface $serializer, $id)
     {
@@ -67,42 +67,7 @@ class UserController extends abstractController
     }
 
     /**
-     * @Route("/api/v1/customer/{customer_id}/users", name="usersByCustomer", methods={"GET"})
-     */
-    public function getUsersLinkedToCustomer(UserRepository $userRepository, ClientRepository $clientRepository, SerializerInterface $serializer, $customer_id): Response
-    {
-        $customer = $clientRepository->find($customer_id);
-
-        if ($customer === null) {
-            return new Response("Le client n'existe pas.", 200, [
-                "Content-Type" => "application/json"
-            ]);
-        }
-
-        $customer_users = $userRepository->findBy(
-            ['client_id' => $customer->getId()]
-        );
-
-        if ($customer_users === null) {
-            return new Response("Aucun utilisateur relié à ce client n'a été trouvé.", 200, [
-                "Content-Type" => "application/json"
-            ]);
-        }
-
-        $json = $serializer->serialize($customer_users, 'json');
-
-        $response = new Response($json, 200, [
-            "Content-Type" => "application/json"
-        ]);
-
-        $response->setPublic();
-        $response->setMaxAge(3600);
-
-        return $response;
-    }
-
-    /**
-     * @Route("/api/v1/user", name="addUserToCustomer", methods={"POST"})
+     * @Route("/api/v1/users", name="addUserLinkedToCustomer", methods={"POST"})
      */
     public function addUserLinkedToCustomer(Request $request, UserService $userService, UserPasswordHasherInterface $userPasswordHasher): Response
     {
@@ -161,7 +126,7 @@ class UserController extends abstractController
     }
 
     /**
-     * @Route("/api/v1/user/{id}", name="deleteUser", methods={"DELETE"})
+     * @Route("/api/v1/users/{id}", name="deleteUser", methods={"DELETE"})
      */
     public function deleteUserLinkedToCustomer(Request $request, UserService $userService): Response
     {
@@ -200,6 +165,42 @@ class UserController extends abstractController
 
         return $response;
     }
+
+      /**
+     * @Route("/api/v1/customers/{customer_id}/users", name="usersByCustomer", methods={"GET"})
+     */
+    public function getUsersLinkedToCustomer(UserRepository $userRepository, ClientRepository $clientRepository, SerializerInterface $serializer, $customer_id): Response
+    {
+        $customer = $clientRepository->find($customer_id);
+
+        if ($customer === null) {
+            return new Response("Le client n'existe pas.", 200, [
+                "Content-Type" => "application/json"
+            ]);
+        }
+
+        $customer_users = $userRepository->findBy(
+            ['client_id' => $customer->getId()]
+        );
+
+        if ($customer_users === null) {
+            return new Response("Aucun utilisateur relié à ce client n'a été trouvé.", 200, [
+                "Content-Type" => "application/json"
+            ]);
+        }
+
+        $json = $serializer->serialize($customer_users, 'json');
+
+        $response = new Response($json, 200, [
+            "Content-Type" => "application/json"
+        ]);
+
+        $response->setPublic();
+        $response->setMaxAge(3600);
+
+        return $response;
+    }
+
 
     private function checkRole(?\Symfony\Component\Security\Core\User\UserInterface $user)
     {
