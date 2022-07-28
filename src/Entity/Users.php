@@ -19,7 +19,7 @@ use Hateoas\Configuration\Annotation as Hateoas;
  * @Hateoas\Relation(
  *      "self",
  *      href = @Hateoas\Route(
- *          "user_by_id",
+ *          "userById",
  *          parameters = { "id" = "expr(object.getId())" },
  *          absolute = true
  *      )

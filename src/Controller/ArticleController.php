@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ArticleController extends abstractController
 {
     /**
-     * @Route("/api/v1/products/{id}", name="productById", methods={"GET"})
+     * @Route("/api/v1/articles/{id}", name="articleById", methods={"GET"})
      */
     public function getArticle(ArticleRepository $articleRepository, SerializerInterface $serializer, $id)
     {
@@ -31,7 +31,7 @@ class ArticleController extends abstractController
     }
 
     /**
-     * @Route("/api/v1/products", name="products", methods={"GET"})
+     * @Route("/api/v1/articles", name="articles", methods={"GET"})
      */
     public function getArticles(ArticleRepository $articleRepository, SerializerInterface $serializer)
     {

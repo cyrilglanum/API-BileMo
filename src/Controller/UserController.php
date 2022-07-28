@@ -42,7 +42,7 @@ class UserController extends abstractController
     }
 
     /**
-     * @Route("/api/users", name="users", methods={"GET"})
+     * @Route("/api/v1/users", name="users", methods={"GET"})
      */
     public function getApiUsers(UserRepository $userRepository, SerializerInterface $serializer)
     {
