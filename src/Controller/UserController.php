@@ -21,7 +21,22 @@ class UserController extends abstractController
      */
     public function getApiUser(UserRepository $userRepository, SerializerInterface $serializer, $id)
     {
-        $user = $userRepository->find($id);
+        try {
+            $this->denyAccessUnlessGranted('read', $this->getUser());
+        } catch (Exception $e) {
+            return new Response("Vous n'êtes pas autorisé à voir les utilisateurs.", 403, ["Content-Type" => "application/json"]);
+        }
+
+        $role = $this->checkRole($this->getUser());
+
+        if ($role === 'admin') {
+            $user = $userRepository->find($id);
+        } else {
+            $user = $userRepository->find($id);
+            if($user->getClientId() != $this->getUser()->getClientId()){
+                return new Response("Vous n'êtes pas autorisé à voir cet utilisateur.", 403, ["Content-Type" => "application/json"]);
+            }
+        }
 
         if ($user === null) {
             return new Response("Aucun utilisateur trouvé avec cet identifiant.", 200, [
@@ -46,7 +61,19 @@ class UserController extends abstractController
      */
     public function getApiUsers(UserRepository $userRepository, SerializerInterface $serializer)
     {
-        $users = $userRepository->findAll();
+        try {
+            $this->denyAccessUnlessGranted('read', $this->getUser());
+        } catch (Exception $e) {
+            return new Response("Vous n'êtes pas autorisé à voir les utilisateurs.", 403, ["Content-Type" => "application/json"]);
+        }
+
+        $role = $this->checkRole($this->getUser());
+
+        if ($role === 'admin') {
+            $users = $userRepository->findAll();
+        } else {
+            $users = $userRepository->findBy(['client_id' => $this->getUser()->getClientId()]);
+        }
 
         if ($users === null) {
             return new Response("Aucun utilisateur trouvé.", 200, [
@@ -71,17 +98,21 @@ class UserController extends abstractController
      */
     public function addUserLinkedToCustomer(Request $request, UserService $userService, UserPasswordHasherInterface $userPasswordHasher): Response
     {
-        $this->denyAccessUnlessGranted('add', $this->getUser());
+        try {
+            $this->denyAccessUnlessGranted('add', $this->getUser());
+        } catch (Exception $e) {
+            return new Response("Vous n'êtes pas autorisé à effectuer cette action.", 401, ["Content-Type" => "application/json"]);
+        }
 
         $role = $this->checkRole($this->getUser());
-        
+
         $user_infos = json_decode($request->get('user'));
         $user_roles = json_decode($request->request->get('roles'));
         $client_id = json_decode($request->request->get('client_id'));
 
         if ($role === 'client') {
             if ($this->getUser()->getClientId() !== $client_id) {
-                return new Response("Vous n'êtes pas autorisé à effectuer cette action.", 401, ["Content-Type" => "application/json"]);
+                return new Response("Vous n'êtes pas autorisé à effectuer cette action.", 403, ["Content-Type" => "application/json"]);
             }
         }
 
@@ -91,7 +122,7 @@ class UserController extends abstractController
         $user->setFirstname(htmlentities($user_infos->firstname));
         $user->setEmail(htmlentities($user_infos->email));
 
-        if(!(is_int($user_infos->postal_code) && is_int($user_infos->actif) && is_int($client_id))){
+        if (!(is_int($user_infos->postal_code) && is_int($user_infos->actif) && is_int($client_id))) {
             return new Response("Données incorrectes.", 401, ["Content-Type" => "application/json"]);
         }
         $user->setPostalcode($user_infos->postal_code);
@@ -130,9 +161,13 @@ class UserController extends abstractController
      */
     public function deleteUserLinkedToCustomer(Request $request, UserService $userService): Response
     {
-        $this->denyAccessUnlessGranted('delete', $this->getUser());
+        try {
+            $this->denyAccessUnlessGranted('delete', $this->getUser());
+        } catch (Exception $e) {
+            return new Response("Vous n'êtes pas autorisé à effectuer cette action.", 403, ["Content-Type" => "application/json"]);
+        }
 
-        if(!is_int((int)$request->get('id'))){
+        if (!is_int((int)$request->get('id'))) {
             return new Response("Données incorrectes.", 401, ["Content-Type" => "application/json"]);
         }
 
@@ -166,11 +201,17 @@ class UserController extends abstractController
         return $response;
     }
 
-      /**
+    /**
      * @Route("/api/v1/customers/{customer_id}/users", name="usersByCustomer", methods={"GET"})
      */
     public function getUsersLinkedToCustomer(UserRepository $userRepository, ClientRepository $clientRepository, SerializerInterface $serializer, $customer_id): Response
     {
+        try {
+            $this->denyAccessUnlessGranted('read', $this->getUser());
+        } catch (Exception $e) {
+            return new Response("Vous n'êtes pas autorisé à voir les utilisateurs.", 403, ["Content-Type" => "application/json"]);
+        }
+
         $customer = $clientRepository->find($customer_id);
 
         if ($customer === null) {

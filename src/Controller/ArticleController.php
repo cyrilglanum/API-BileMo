@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Repository\ArticleRepository;
+use Exception;
 use JMS\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,6 +17,12 @@ class ArticleController extends abstractController
      */
     public function getArticle(ArticleRepository $articleRepository, SerializerInterface $serializer, $id)
     {
+        try {
+            $this->denyAccessUnlessGranted('read', $this->getUser());
+        } catch (Exception $e) {
+            return new Response("Vous n'êtes pas autorisé à voir les articles.", 403, ["Content-Type" => "application/json"]);
+        }
+
         $article = $articleRepository->find($id);
 
         $json = $serializer->serialize($article, 'json');
@@ -35,6 +42,11 @@ class ArticleController extends abstractController
      */
     public function getArticles(ArticleRepository $articleRepository, SerializerInterface $serializer)
     {
+        try {
+            $this->denyAccessUnlessGranted('read', $this->getUser());
+        } catch (Exception $e) {
+            return new Response("Vous n'êtes pas autorisé à voir les articles.", 403, ["Content-Type" => "application/json"]);
+        }
 
         $articles = $articleRepository->findAll();
 

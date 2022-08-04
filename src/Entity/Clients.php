@@ -51,11 +51,11 @@ class Clients extends abstractController
      */
     private $email;
 
-    /**
-     * @ORM\Column(type="string")
-     * @Serializer\Expose()
-     */
-    private $password;
+//    /**
+//     * @ORM\Column(type="string")
+//     * @Serializer\Expose()
+//     */
+//    private $password;
 
     /**
      * @ORM\Column(type="datetime")
@@ -123,20 +123,20 @@ class Clients extends abstractController
         return $this;
     }
 
-    /**
-     * @see UserInterface
-     */
-    public function getPassword():string
-    {
-        return $this->password;
-    }
-
-    public function setPassword($password)
-    {
-        $this->password = $password;
-
-        return $this;
-    }
+//    /**
+//     * @see UserInterface
+//     */
+//    public function getPassword():string
+//    {
+//        return $this->password;
+//    }
+//
+//    public function setPassword($password)
+//    {
+//        $this->password = $password;
+//
+//        return $this;
+//    }
 
     /**
      * @return DateTime
