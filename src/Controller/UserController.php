@@ -33,13 +33,19 @@ class UserController extends abstractController
             $user = $userRepository->find($id);
         } else {
             $user = $userRepository->find($id);
-            if($user->getClientId() != $this->getUser()->getClientId()){
+
+            if ($user == null) {
+                return new Response("Aucun utilisateur trouvé avec cet identifiant.", 404, [
+                    "Content-Type" => "application/json"
+                ]);
+            }
+            if ($user->getClientId() != $this->getUser()->getClientId()) {
                 return new Response("Vous n'êtes pas autorisé à voir cet utilisateur.", 403, ["Content-Type" => "application/json"]);
             }
         }
 
-        if ($user === null) {
-            return new Response("Aucun utilisateur trouvé avec cet identifiant.", 200, [
+        if ($user == null) {
+            return new Response("Aucun utilisateur trouvé avec cet identifiant.", 404, [
                 "Content-Type" => "application/json"
             ]);
         }

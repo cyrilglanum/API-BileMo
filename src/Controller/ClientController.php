@@ -28,6 +28,13 @@ class ClientController extends abstractController
             $client = $clientRepository->find($id);
         } else {
             $client = $clientRepository->find($id);
+
+            if ($client === null) {
+                return new Response("Aucun clients trouvé", 200, [
+                    "Content-Type" => "application/json"
+                ]);
+            }
+
             if ($client->getId() != $this->getUser()->getClientId()) {
                 return new Response("Vous n'êtes pas autorisé à voir ce client.", 403, ["Content-Type" => "application/json"]);
             }
@@ -75,6 +82,13 @@ class ClientController extends abstractController
             $json = $serializer->serialize($clients, 'json');
         } else {
             $client = $clientRepository->findBy(['id' => $this->getUser()->getClientId()]);
+
+            if ($client === null) {
+                return new Response("Aucun client trouvé avec cet identifiant.", 404, [
+                    "Content-Type" => "application/json"
+                ]);
+            }
+
             if ($client[0]->getId() != $this->getUser()->getClientId()) {
                 return new Response("Vous n'êtes pas autorisé à voir les clients.", 403, ["Content-Type" => "application/json"]);
             }
