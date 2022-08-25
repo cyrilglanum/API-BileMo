@@ -107,7 +107,7 @@ class UserController extends abstractController
         try {
             $this->denyAccessUnlessGranted('add', $this->getUser());
         } catch (Exception $e) {
-            return new Response("Vous n'êtes pas autorisé à effectuer cette action.", 401, ["Content-Type" => "application/json"]);
+            return new Response("Vous n'êtes pas autorisé à effectuer cette action.", 403, ["Content-Type" => "application/json"]);
         }
 
         $role = $this->checkRole($this->getUser());
@@ -129,7 +129,7 @@ class UserController extends abstractController
         $user->setEmail(htmlentities($user_infos->email));
 
         if (!(is_int($user_infos->postal_code) && is_int($user_infos->actif) && is_int($client_id))) {
-            return new Response("Données incorrectes.", 401, ["Content-Type" => "application/json"]);
+            return new Response("Données incorrectes.", 400, ["Content-Type" => "application/json"]);
         }
         $user->setPostalcode($user_infos->postal_code);
         $user->setVille(htmlentities($user_infos->ville));
