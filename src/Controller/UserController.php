@@ -182,7 +182,7 @@ class UserController extends abstractController
         $role = $this->checkRole($this->getUser());
 
         if ($role === 'client') {
-            if ($this->getUser()->getClientId() !== json_decode($request->request->get('client_id'))) {
+            if ($this->getUser()->getClientId() !== $userToDelete->getClientId()) {
                 return new Response("Vous n'êtes pas autorisé à effectuer cette action.", 401, ["Content-Type" => "application/json"]);
             }
         }
