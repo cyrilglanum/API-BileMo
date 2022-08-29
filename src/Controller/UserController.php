@@ -117,7 +117,7 @@ class UserController extends abstractController
         $client_id = json_decode($request->request->get('client_id'));
 
         if ($role === 'client') {
-            if ($this->getUser()->getClientId() !== $client_id) {
+            if ($this->getUser()->getClientId() !== $user_infos->client_id) {
                 return new Response("Vous n'êtes pas autorisé à effectuer cette action.", 403, ["Content-Type" => "application/json"]);
             }
         }
@@ -128,14 +128,14 @@ class UserController extends abstractController
         $user->setFirstname(htmlentities($user_infos->firstname));
         $user->setEmail(htmlentities($user_infos->email));
 
-        if (!(is_int($user_infos->postal_code) && is_int($user_infos->actif) && is_int($client_id))) {
+        if (!(is_int($user_infos->postal_code) && is_int($user_infos->actif) && is_int($user_infos->client_id))) {
             return new Response("Données incorrectes.", 400, ["Content-Type" => "application/json"]);
         }
         $user->setPostalcode($user_infos->postal_code);
         $user->setVille(htmlentities($user_infos->ville));
         $user->setActif($user_infos->actif);
         $user->setRoles([str_replace('\'', "\"", $user_roles->roles ?? "ROLE_USER")]);
-        $user->setClientId($client_id);
+        $user->setClientId($user_infos->client_id);
         $user->setCreatedAt(new \DateTimeImmutable('now'));
         $user->setUpdatedAt(new \DateTimeImmutable('now'));
         $user->setPassword($userPasswordHasher->hashPassword($user, $user_infos->password));
